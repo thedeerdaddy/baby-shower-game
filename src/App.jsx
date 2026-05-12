@@ -82,7 +82,7 @@ const INITIAL_STATE = {
   },
 
   trivia: {
-    questions: [...DEFAULT_TRIVIA],
+    questions: [...DEFAULT_TRIVIA_QUESTIONS],
     currentIdx: null,
     guesses: {},
     revealedIdx: [],
@@ -96,27 +96,34 @@ const INITIAL_STATE = {
 }
 
 const DEFAULT_TRIVIA = [
-  { question: "Where did Cooper and Michelle have their first date?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who said 'I love you' first?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "How did Cooper propose?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Where did the proposal happen?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Michelle's favorite movie?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Cooper's most annoying habit according to Michelle?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Michelle's most annoying habit according to Cooper?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who is the better cook?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Cooper's go-to order at a restaurant?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What was the first trip they took together?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who cried first when they found out they were pregnant?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What did Cooper say when he found out it was a girl?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Michelle's love language?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Cooper's love language?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who takes longer to get ready?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who is more likely to get lost without GPS?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What show are they currently watching together?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "Who initiated the first kiss?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What is Lainey's due date?", cooperAnswer: "???", michelleAnswer: "???" },
-  { question: "What name did they almost name Lainey before settling on Lainey?", cooperAnswer: "???", michelleAnswer: "???" },
-].map(q => ({ ...q, id: Math.random().toString(36).slice(2, 9) }))
+  "Where did Cooper and Michelle have their first date?",
+  "Who said 'I love you' first?",
+  "How did Cooper propose?",
+  "Where did the proposal happen?",
+  "What is Michelle's favorite movie?",
+  "What is Cooper's most annoying habit according to Michelle?",
+  "What is Michelle's most annoying habit according to Cooper?",
+  "Who is the better cook?",
+  "What is Cooper's go-to order at a restaurant?",
+  "What was the first trip they took together?",
+  "Who cried first when they found out they were pregnant?",
+  "What did Cooper say when he found out it was a girl?",
+  "What is Michelle's love language?",
+  "What is Cooper's love language?",
+  "Who takes longer to get ready?",
+  "Who is more likely to get lost without GPS?",
+  "What show are they currently watching together?",
+  "Who initiated the first kiss?",
+  "What is Lainey's due date?",
+  "What name did they almost name Lainey before settling on Lainey?",
+]
+
+const DEFAULT_TRIVIA_QUESTIONS = DEFAULT_TRIVIA.map((question, i) => ({
+  id: `default-trivia-${i}`,
+  question,
+  cooperAnswer: '???',
+  michelleAnswer: '???',
+}))
 
 async function loadState() {
   const key = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -169,7 +176,7 @@ function migrateState(s) {
     if (!s.tyk.michelleQuestions) s.tyk.michelleQuestions = []
     if (!s.tyk.revealedIds) s.tyk.revealedIds = []
     if (!s.trivia) s.trivia = JSON.parse(JSON.stringify(INITIAL_STATE.trivia))
-    if (!s.trivia.questions || !Array.isArray(s.trivia.questions)) s.trivia.questions = [...DEFAULT_TRIVIA]
+    if (!s.trivia.questions || !Array.isArray(s.trivia.questions)) s.trivia.questions = [...DEFAULT_TRIVIA_QUESTIONS]
     if (!s.trivia.revealedIdx) s.trivia.revealedIdx = []
     if (!s.players || !Array.isArray(s.players)) s.players = []
     if (s.wknwb && s.tyk.cooperQuestions.length === 0) s.tyk.cooperQuestions = (s.wknwb.submittedQuestions || [])
@@ -305,7 +312,7 @@ export default function App() {
     fresh.players = s.players
     fresh.scores = s.scores
     fresh.quiplash.prompts = s.quiplash.prompts
-    fresh.trivia.questions = s.trivia.questions.length > 0 ? s.trivia.questions : [...DEFAULT_TRIVIA]
+    fresh.trivia.questions = s.trivia.questions.length > 0 ? s.trivia.questions : [...DEFAULT_TRIVIA_QUESTIONS]
     fresh.tyk.cooperQuestions = s.tyk.cooperQuestions
     fresh.tyk.michelleQuestions = s.tyk.michelleQuestions
     fresh.qa.questions = s.qa.questions
