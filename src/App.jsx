@@ -49,6 +49,36 @@ const DEFAULT_QUIPLASH = [
 // Prompts are stored as { text, submittedBy } objects
 const DEFAULT_PROMPTS = DEFAULT_QUIPLASH.map(text => ({ text, submittedBy: 'Default' }))
 
+const DEFAULT_TRIVIA = [
+  "Where did Cooper and Michelle have their first date?",
+  "Who said 'I love you' first?",
+  "How did Cooper propose?",
+  "Where did the proposal happen?",
+  "What is Michelle's favorite movie?",
+  "What is Cooper's most annoying habit according to Michelle?",
+  "What is Michelle's most annoying habit according to Cooper?",
+  "Who is the better cook?",
+  "What is Cooper's go-to order at a restaurant?",
+  "What was the first trip they took together?",
+  "Who cried first when they found out they were pregnant?",
+  "What did Cooper say when he found out it was a girl?",
+  "What is Michelle's love language?",
+  "What is Cooper's love language?",
+  "Who takes longer to get ready?",
+  "Who is more likely to get lost without GPS?",
+  "What show are they currently watching together?",
+  "Who initiated the first kiss?",
+  "What is Lainey's due date?",
+  "What name did they almost name Lainey before settling on Lainey?",
+]
+
+const DEFAULT_TRIVIA_QUESTIONS = DEFAULT_TRIVIA.map((question, i) => ({
+  id: `default-trivia-${i}`,
+  question,
+  cooperAnswer: '???',
+  michelleAnswer: '???',
+}))
+
 const INITIAL_STATE = {
   phase: 'lobby',
   players: [],
@@ -95,37 +125,8 @@ const INITIAL_STATE = {
   },
 }
 
-const DEFAULT_TRIVIA = [
-  "Where did Cooper and Michelle have their first date?",
-  "Who said 'I love you' first?",
-  "How did Cooper propose?",
-  "Where did the proposal happen?",
-  "What is Michelle's favorite movie?",
-  "What is Cooper's most annoying habit according to Michelle?",
-  "What is Michelle's most annoying habit according to Cooper?",
-  "Who is the better cook?",
-  "What is Cooper's go-to order at a restaurant?",
-  "What was the first trip they took together?",
-  "Who cried first when they found out they were pregnant?",
-  "What did Cooper say when he found out it was a girl?",
-  "What is Michelle's love language?",
-  "What is Cooper's love language?",
-  "Who takes longer to get ready?",
-  "Who is more likely to get lost without GPS?",
-  "What show are they currently watching together?",
-  "Who initiated the first kiss?",
-  "What is Lainey's due date?",
-  "What name did they almost name Lainey before settling on Lainey?",
-]
-
-const DEFAULT_TRIVIA_QUESTIONS = DEFAULT_TRIVIA.map((question, i) => ({
-  id: `default-trivia-${i}`,
-  question,
-  cooperAnswer: '???',
-  michelleAnswer: '???',
-}))
-
 async function loadState() {
+  const url = import.meta.env.VITE_SUPABASE_URL
   const key = import.meta.env.VITE_SUPABASE_ANON_KEY
   if (!url || !key) {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) } catch { return null }
