@@ -152,29 +152,42 @@ const promptBy = (p) => (p && typeof p === 'object' ? p.submittedBy : null)
 
 function migrateState(s) {
   if (!s) return null
-  if (!s.tyk) s.tyk = JSON.parse(JSON.stringify(INITIAL_STATE.tyk))
-  if (!s.qa) s.qa = JSON.parse(JSON.stringify(INITIAL_STATE.qa))
-  if (!s.scores) s.scores = {}
-  if (!s.lastRoundTokens) s.lastRoundTokens = {}
-  if (!s.quiplash.votes) s.quiplash.votes = {}
-  if (!s.quiplash.judgeVotes) s.quiplash.judgeVotes = {}
-  if (!s.quiplash.phase2) s.quiplash.phase2 = 'answering'
-  if (!s.tyk.votes) s.tyk.votes = {}
-  if (!s.tyk.judgeVotes) s.tyk.judgeVotes = {}
-  if (s.wknwb && !s.tyk.cooperQuestions.length) s.tyk.cooperQuestions = (s.wknwb.submittedQuestions || [])
-  // migrate string prompts to objects
-  if (s.quiplash.prompts && s.quiplash.prompts.length > 0 && typeof s.quiplash.prompts[0] === 'string') {
-    s.quiplash.prompts = s.quiplash.prompts.map(p => ({ text: p, submittedBy: DEFAULT_QUIPLASH.includes(p) ? 'Default' : 'Host' }))
+  try {
+    if (!s.tyk) s.tyk = JSON.parse(JSON.stringify(INITIAL_STATE.tyk))
+    if (!s.qa) s.qa = JSON.parse(JSON.stringify(INITIAL_STATE.qa))
+    if (!s.scores) s.scores = {}
+    if (!s.lastRoundTokens) s.lastRoundTokens = {}
+    if (!s.quiplash) s.quiplash = JSON.parse(JSON.stringify(INITIAL_STATE.quiplash))
+    if (!s.quiplash.votes) s.quiplash.votes = {}
+    if (!s.quiplash.judgeVotes) s.quiplash.judgeVotes = {}
+    if (!s.quiplash.phase2) s.quiplash.phase2 = 'answering'
+    if (!s.quiplash.prompts || !Array.isArray(s.quiplash.prompts) || s.quiplash.prompts.length === 0) s.quiplash.prompts = [...DEFAULT_PROMPTS]
+    if (!s.quiplash.usedPrompts) s.quiplash.usedPrompts = []
+    if (!s.tyk.votes) s.tyk.votes = {}
+    if (!s.tyk.judgeVotes) s.tyk.judgeVotes = {}
+    if (!s.tyk.cooperQuestions) s.tyk.cooperQuestions = []
+    if (!s.tyk.michelleQuestions) s.tyk.michelleQuestions = []
+    if (!s.tyk.revealedIds) s.tyk.revealedIds = []
+    if (!s.trivia) s.trivia = JSON.parse(JSON.stringify(INITIAL_STATE.trivia))
+    if (!s.trivia.questions || !Array.isArray(s.trivia.questions)) s.trivia.questions = [...DEFAULT_TRIVIA]
+    if (!s.trivia.revealedIdx) s.trivia.revealedIdx = []
+    if (!s.players || !Array.isArray(s.players)) s.players = []
+    if (s.wknwb && s.tyk.cooperQuestions.length === 0) s.tyk.cooperQuestions = (s.wknwb.submittedQuestions || [])
+    // migrate string prompts to objects
+    if (s.quiplash.prompts.length > 0 && typeof s.quiplash.prompts[0] === 'string') {
+      s.quiplash.prompts = s.quiplash.prompts.map(p => ({ text: p, submittedBy: DEFAULT_QUIPLASH.includes(p) ? 'Default' : 'Host' }))
+    }
+    if (s.quiplash.usedPrompts.length > 0 && typeof s.quiplash.usedPrompts[0] === 'string') {
+      s.quiplash.usedPrompts = s.quiplash.usedPrompts.map(p => ({ text: p, submittedBy: 'Host' }))
+    }
+    if (s.quiplash.currentPrompt && typeof s.quiplash.currentPrompt === 'string') {
+      s.quiplash.currentPrompt = { text: s.quiplash.currentPrompt, submittedBy: 'Host' }
+    }
+    return s
+  } catch(e) {
+    console.error('Migration error:', e)
+    return null
   }
-  // migrate string usedPrompts to objects
-  if (s.quiplash.usedPrompts && s.quiplash.usedPrompts.length > 0 && typeof s.quiplash.usedPrompts[0] === 'string') {
-    s.quiplash.usedPrompts = s.quiplash.usedPrompts.map(p => ({ text: p, submittedBy: 'Host' }))
-  }
-  // migrate string currentPrompt to object
-  if (s.quiplash.currentPrompt && typeof s.quiplash.currentPrompt === 'string') {
-    s.quiplash.currentPrompt = { text: s.quiplash.currentPrompt, submittedBy: 'Host' }
-  }
-  return s
 }
 
 // ── SCORING HELPERS ────────────────────────────────────────────────────────
@@ -224,8 +237,9 @@ export default function App() {
   stateRef.current = state
 
   const refresh = useCallback(async () => {
-    const s = migrateState(await loadState())
-    if (!s) { setState(INITIAL_STATE); return }
+    const raw = await loadState()
+    const s = raw ? migrateState(raw) : null
+    if (!s) { setState(INITIAL_STATE); saveState(INITIAL_STATE); return }
     setState(prev => {
       if (JSON.stringify(prev) === JSON.stringify(s)) return prev
       return s
