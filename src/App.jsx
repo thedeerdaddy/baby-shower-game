@@ -9,6 +9,31 @@ const JUDGE_PIN = 'baby' // Cooper and Michelle's judge PIN
 const PHOTO_BUCKET = 'baby-shower-photos'
 
 const DEFAULT_QUIPLASH = [
+  "Lainey's first words will definitely be...",
+  "The thing Cooper will be terrible at as a dad...",
+  "Michelle's parenting motto will be...",
+  "Lainey's most likely childhood nickname...",
+  "The first thing Lainey will inherit from Cooper...",
+  "The first thing Lainey will inherit from Michelle...",
+  "Cooper's face in the delivery room looked like...",
+  "The most useless gift at this baby shower...",
+  "Lainey's future career, based on her parents...",
+  "The one rule Cooper and Michelle will immediately break as parents...",
+  "What Lainey is already plotting from the womb...",
+  "The song Cooper will embarrassingly sing to Lainey at 3am...",
+  "Michelle's search history in the first week home from the hospital...",
+  "Cooper's search history in the first week home from the hospital...",
+  "The thing nobody warned Cooper and Michelle about...",
+  "Lainey's first Halloween costume, chosen by Cooper...",
+  "Lainey's first Halloween costume, chosen by Michelle...",
+  "What Lainey will tell her therapist about her parents someday...",
+  "Lainey's first sentence will be a complaint about...",
+  "The thing Cooper will try to automate about parenting first...",
+  "The Canopy AI solution Cooper will try to sell to other new dads...",
+  "Michelle will manage Lainey like a Smoky Mountain vacation rental, which means...",
+  "The ClickUp task Michelle creates for Cooper on day one...",
+  "Lainey's first property listing will describe her as...",
+  "The Hospitable automated message Michelle sends to Lainey at bedtime...",
   "The worst baby name ever thought up...",
   "What babies are really saying when they cry...",
   "The thing nobody tells you about having a baby...",
@@ -16,10 +41,8 @@ const DEFAULT_QUIPLASH = [
   "The most useless item in any diaper bag...",
   "What the baby is plotting at 3am...",
   "A rejected slogan for baby formula...",
-  "The baby's spirit animal is...",
   "What new parents miss most about sleep...",
   "The one thing you should never say to a new mom...",
-  "Cooper and Michelle's baby will grow up to be...",
   "The worst advice anyone has ever given about babies...",
 ]
 
@@ -59,7 +82,7 @@ const INITIAL_STATE = {
   },
 
   trivia: {
-    questions: [],
+    questions: [...DEFAULT_TRIVIA],
     currentIdx: null,
     guesses: {},
     revealedIdx: [],
@@ -72,8 +95,30 @@ const INITIAL_STATE = {
   },
 }
 
+const DEFAULT_TRIVIA = [
+  { question: "Where did Cooper and Michelle have their first date?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who said 'I love you' first?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "How did Cooper propose?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Where did the proposal happen?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Michelle's favorite movie?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Cooper's most annoying habit according to Michelle?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Michelle's most annoying habit according to Cooper?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who is the better cook?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Cooper's go-to order at a restaurant?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What was the first trip they took together?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who cried first when they found out they were pregnant?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What did Cooper say when he found out it was a girl?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Michelle's love language?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Cooper's love language?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who takes longer to get ready?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who is more likely to get lost without GPS?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What show are they currently watching together?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "Who initiated the first kiss?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What is Lainey's due date?", cooperAnswer: "???", michelleAnswer: "???" },
+  { question: "What name did they almost name Lainey before settling on Lainey?", cooperAnswer: "???", michelleAnswer: "???" },
+].map(q => ({ ...q, id: Math.random().toString(36).slice(2, 9) }))
+
 async function loadState() {
-  const url = import.meta.env.VITE_SUPABASE_URL
   const key = import.meta.env.VITE_SUPABASE_ANON_KEY
   if (!url || !key) {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) } catch { return null }
@@ -246,7 +291,7 @@ export default function App() {
     fresh.players = s.players
     fresh.scores = s.scores
     fresh.quiplash.prompts = s.quiplash.prompts
-    fresh.trivia.questions = s.trivia.questions
+    fresh.trivia.questions = s.trivia.questions.length > 0 ? s.trivia.questions : [...DEFAULT_TRIVIA]
     fresh.tyk.cooperQuestions = s.tyk.cooperQuestions
     fresh.tyk.michelleQuestions = s.tyk.michelleQuestions
     fresh.qa.questions = s.qa.questions
@@ -390,7 +435,7 @@ export default function App() {
   return (
     <div className="app">
       <nav className="nav no-print">
-        <div className="nav-title">Cooper & Michelle 🍼</div>
+        <div className="nav-title">Lainey's Baby Shower 🍼</div>
         <div className="nav-tabs">
           <button className={`nav-tab ${view === 'join' ? 'active' : ''}`} onClick={() => setView('join')}>{joined ? '📱 Play' : '🎉 Join'}</button>
           <button className={`nav-tab ${view === 'qa' ? 'active' : ''}`} onClick={() => setView('qa')}>💌 Ask</button>
@@ -408,7 +453,7 @@ export default function App() {
       )}
 
       <main className="main">
-        {view === 'join' && <JoinView state={state} joined={joined} playerName={playerName} hasSubmitted={hasSubmitted} hasVoted={hasVoted} timerPct={timerPct} onJoin={joinGame} onSubmitQuiplash={submitQuiplash} onVoteQuiplash={voteQuiplash} onSubmitTykGuess={submitTykGuess} onVoteTyk={voteTyk} onSubmitTrivia={submitTrivia} onSubmitCooperQuestion={submitCooperQuestion} onSubmitMichelleQuestion={submitMichelleQuestion} onAddQuiplashPrompt={addQuiplashPrompt} />}
+        {view === 'join' && <JoinView state={state} joined={joined} playerName={playerName} hasSubmitted={hasSubmitted} hasVoted={hasVoted} timerPct={timerPct} onJoin={joinGame} onSubmitQuiplash={submitQuiplash} onVoteQuiplash={voteQuiplash} onSubmitTykGuess={submitTykGuess} onVoteTyk={voteTyk} onSubmitTrivia={submitTrivia} onSubmitCooperQuestion={submitCooperQuestion} onSubmitMichelleQuestion={submitMichelleQuestion} onAddQuiplashPrompt={addQuiplashPrompt} onSubmitQA={submitQA} />}
         {view === 'qa' && <QAView state={state} joined={joined} playerName={playerName} onSubmitQA={submitQA} />}
         {view === 'scores' && <ScoresView state={state} animatingTokens={animatingTokens} />}
         {view === 'pin' && <PinView pinInput={pinInput} setPinInput={setPinInput} pinError={pinError} pinMode={pinMode} onLogin={hostLogin} />}
@@ -596,7 +641,7 @@ function JudgeView({ state, judgeName, setJudgeName, onJudgeVoteQuiplash, onJudg
 }
 
 // ── JOIN VIEW ──────────────────────────────────────────────────────────────
-function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct, onJoin, onSubmitQuiplash, onVoteQuiplash, onSubmitTykGuess, onVoteTyk, onSubmitTrivia, onSubmitCooperQuestion, onSubmitMichelleQuestion, onAddQuiplashPrompt }) {
+function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct, onJoin, onSubmitQuiplash, onVoteQuiplash, onSubmitTykGuess, onVoteTyk, onSubmitTrivia, onSubmitCooperQuestion, onSubmitMichelleQuestion, onAddQuiplashPrompt, onSubmitQA }) {
   const [nameInput, setNameInput] = useState('')
   const [answer, setAnswer] = useState('')
   const [tykAns, setTykAns] = useState('')
@@ -607,6 +652,8 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
   const [michelleQDone, setMichelleQDone] = useState(false)
   const [quiplashPrompt, setQuiplashPrompt] = useState('')
   const [quiplashPromptDone, setQuiplashPromptDone] = useState(false)
+  const [qaQuestion, setQaQuestion] = useState('')
+  const [qaQuestionDone, setQaQuestionDone] = useState(false)
   const [selectedVotes, setSelectedVotes] = useState([])
   const [selectedTykVote, setSelectedTykVote] = useState(null)
   const phase = state.phase
@@ -616,7 +663,7 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
       <>
         <div className="hero">
           <div className="hero-eyebrow">Baby Shower Games</div>
-          <h1>Welcome to Cooper<br />& <em>Michelle's</em> Party</h1>
+          <h1>Welcome to <em>Lainey's</em><br />Baby Shower</h1>
           <p className="hero-sub">Enter your name to join the fun</p>
         </div>
         <div className="card">
@@ -660,6 +707,17 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
             : <div style={{ display: 'flex', gap: 8 }}>
               <input className="input" style={{ flex: 1 }} placeholder="e.g. The baby's first words will be..." value={quiplashPrompt} onChange={e => setQuiplashPrompt(e.target.value)} />
               <button className="btn btn-sage btn-sm" disabled={!quiplashPrompt.trim()} onClick={() => { onAddQuiplashPrompt(quiplashPrompt.trim(), playerName); setQuiplashPromptDone(true) }}>Add</button>
+            </div>
+          }
+        </div>
+        <div className="card">
+          <div className="card-title">Ask Anything 💌</div>
+          <p className="card-sub">Ask Cooper and Michelle anything — the host will read it out live</p>
+          {qaQuestionDone
+            ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--sage-dark)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setQaQuestion(''); setQaQuestionDone(false) }}>Ask another</button></div>
+            : <div style={{ display: 'flex', gap: 8 }}>
+              <input className="input" style={{ flex: 1 }} placeholder="e.g. What are you most excited about?" value={qaQuestion} onChange={e => setQaQuestion(e.target.value)} />
+              <button className="btn btn-primary btn-sm" disabled={!qaQuestion.trim()} onClick={() => { onSubmitQA(qaQuestion.trim()); setQaQuestionDone(true) }}>Add</button>
             </div>
           }
         </div>
@@ -838,13 +896,9 @@ function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetSc
             {customPrompts.length === 0 ? <p style={{ fontSize: 13, color: 'var(--muted)', padding: '8px 0' }}>12 built-in prompts active.</p>
               : customPrompts.map(p => <div key={p.text} className="list-item"><span className="li-text">{p.text} {p.submittedBy && p.submittedBy !== 'Default' && <span style={{ fontSize: 11, color: 'var(--muted)' }}>by {p.submittedBy}</span>}</span><button className="li-del" onClick={() => onRemoveQuiplashPrompt(p.text)}>✕</button></div>)}
           </div>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
             <input className="input" style={{ flex: 1, padding: '10px 14px' }} placeholder="Add a custom prompt..." value={newPrompt} onChange={e => setNewPrompt(e.target.value)} onKeyDown={e => e.key === 'Enter' && newPrompt.trim() && (onAddQuiplashPrompt(newPrompt.trim()), setNewPrompt(''))} />
             <button className="btn btn-ghost btn-sm" disabled={!newPrompt.trim()} onClick={() => { onAddQuiplashPrompt(newPrompt.trim()); setNewPrompt('') }}>Add</button>
-          </div>
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16 }}>
-            <button className="btn btn-sage btn-sm" onClick={handleGen}>✨ Generate AI Prompts</button>
-            {genStatus && <span style={{ fontSize: 13, color: 'var(--sage-dark)' }}>{genStatus}</span>}
           </div>
           <div className="divider" />
           <button className="btn btn-primary btn-block" onClick={() => onSelectGame('quiplash')} disabled={playerCount === 0}>Launch Quiplash 😂</button>
