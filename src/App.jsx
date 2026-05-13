@@ -1369,14 +1369,14 @@ function PhotosView({ isHost, isJudge }) {
         <>
           {/* MAIN PHOTO */}
           <div
-            style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', marginBottom: 16, background: 'var(--deep)', aspectRatio: '4/3', cursor: 'pointer' }}
+            style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', marginBottom: 16, background: 'var(--deep)', maxHeight: '70vh' }}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
             <img
               src={photos[currentIdx]?.url}
               alt=""
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'opacity 0.3s' }}
+              style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'contain', display: 'block' }}
             />
 
             {/* Nav arrows */}
