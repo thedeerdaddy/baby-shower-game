@@ -1,25 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Dancing+Script:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cream: #FDF6EE;
-  --blush: #F2C4C4;
+  --cream: #FEF8F3;
+  --blush: #F5D5D5;
   --blush-dark: #C47F7F;
-  --sage: #A8C5A0;
+  --sage: #C3D9B8;
   --sage-dark: #5E8C57;
   --dusty-rose: #D4869A;
   --dusty-deep: #9C4D62;
   --warm-gold: #E8C547;
   --gold-dark: #A8891A;
-  --deep: #2C1F2E;
+  --deep: #3D2A38;
   --deep-mid: #4A3550;
-  --muted: #8A7590;
-  --surface: #FFFFFF;
-  --border: rgba(180, 140, 160, 0.2);
+  --muted: #9A7A8A;
+  --surface: rgba(255,255,255,0.88);
+  --border: rgba(212, 134, 154, 0.18);
   --radius: 20px;
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Dancing Script', cursive;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-body: 'Jost', sans-serif;
 }
 
 html, body, #root {
@@ -31,10 +32,34 @@ html, body, #root {
   line-height: 1.6;
 }
 
-button { cursor: pointer; font-family: var(--font-body); }
-input, textarea, select { font-family: var(--font-body); }
+/* FLORAL BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 340px 260px at 5% 8%, rgba(245,213,213,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 280px 200px at 95% 5%, rgba(195,217,184,0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 220px 180px at 85% 92%, rgba(245,213,213,0.4) 0%, transparent 65%),
+    radial-gradient(ellipse 260px 200px at 8% 88%, rgba(195,217,184,0.38) 0%, transparent 65%),
+    radial-gradient(ellipse 180px 140px at 50% 3%, rgba(232,197,71,0.12) 0%, transparent 70%);
+}
 
-.app { min-height: 100vh; display: flex; flex-direction: column; }
+/* SVG floral overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Ccircle cx='30' cy='30' r='12' fill='none' stroke='%23D4869A' stroke-width='1.5'/%3E%3Ccircle cx='30' cy='30' r='6' fill='%23D4869A' opacity='0.4'/%3E%3Cellipse cx='18' cy='22' rx='8' ry='5' fill='%23D4869A' opacity='0.25' transform='rotate(-30 18 22)'/%3E%3Cellipse cx='42' cy='22' rx='8' ry='5' fill='%23D4869A' opacity='0.25' transform='rotate(30 42 22)'/%3E%3Cellipse cx='18' cy='38' rx='8' ry='5' fill='%23D4869A' opacity='0.25' transform='rotate(30 18 38)'/%3E%3Cellipse cx='42' cy='38' rx='8' ry='5' fill='%23D4869A' opacity='0.25' transform='rotate(-30 42 38)'/%3E%3Ccircle cx='30' cy='10' r='4' fill='%23C3D9B8' opacity='0.5'/%3E%3Ccircle cx='30' cy='50' r='4' fill='%23C3D9B8' opacity='0.5'/%3E%3Ccircle cx='10' cy='30' r='4' fill='%23C3D9B8' opacity='0.5'/%3E%3Ccircle cx='50' cy='30' r='4' fill='%23C3D9B8' opacity='0.5'/%3E%3Ccircle cx='200' cy='130' r='10' fill='none' stroke='%23A8C5A0' stroke-width='1.2'/%3E%3Ccircle cx='200' cy='130' r='5' fill='%23A8C5A0' opacity='0.35'/%3E%3Cellipse cx='190' cy='120' rx='7' ry='4' fill='%23A8C5A0' opacity='0.2' transform='rotate(-40 190 120)'/%3E%3Cellipse cx='210' cy='120' rx='7' ry='4' fill='%23A8C5A0' opacity='0.2' transform='rotate(40 210 120)'/%3E%3Cellipse cx='190' cy='140' rx='7' ry='4' fill='%23A8C5A0' opacity='0.2' transform='rotate(40 190 140)'/%3E%3Cellipse cx='210' cy='140' rx='7' ry='4' fill='%23A8C5A0' opacity='0.2' transform='rotate(-40 210 140)'/%3E%3Ccircle cx='100' cy='300' r='14' fill='none' stroke='%23F5D5D5' stroke-width='1.5'/%3E%3Ccircle cx='100' cy='300' r='7' fill='%23D4869A' opacity='0.3'/%3E%3Cellipse cx='86' cy='290' rx='9' ry='6' fill='%23F5D5D5' opacity='0.4' transform='rotate(-30 86 290)'/%3E%3Cellipse cx='114' cy='290' rx='9' ry='6' fill='%23F5D5D5' opacity='0.4' transform='rotate(30 114 290)'/%3E%3Cellipse cx='86' cy='310' rx='9' ry='6' fill='%23F5D5D5' opacity='0.4' transform='rotate(30 86 310)'/%3E%3Cellipse cx='114' cy='310' rx='9' ry='6' fill='%23F5D5D5' opacity='0.4' transform='rotate(-30 114 310)'/%3E%3Ccircle cx='350' cy='250' r='11' fill='none' stroke='%23D4869A' stroke-width='1.2'/%3E%3Ccircle cx='350' cy='250' r='5' fill='%23D4869A' opacity='0.3'/%3E%3Cellipse cx='339' cy='241' rx='8' ry='5' fill='%23D4869A' opacity='0.2' transform='rotate(-35 339 241)'/%3E%3Cellipse cx='361' cy='241' rx='8' ry='5' fill='%23D4869A' opacity='0.2' transform='rotate(35 361 241)'/%3E%3Ccircle cx='280' cy='60' r='8' fill='none' stroke='%23C3D9B8' stroke-width='1'/%3E%3Ccircle cx='280' cy='60' r='4' fill='%23A8C5A0' opacity='0.3'/%3E%3Cellipse cx='271' cy='52' rx='6' ry='4' fill='%23C3D9B8' opacity='0.3' transform='rotate(-30 271 52)'/%3E%3Cellipse cx='289' cy='52' rx='6' ry='4' fill='%23C3D9B8' opacity='0.3' transform='rotate(30 289 52)'/%3E%3Cpath d='M 60 80 Q 70 60 80 80' stroke='%23A8C5A0' stroke-width='1.2' fill='none' opacity='0.4'/%3E%3Cpath d='M 55 75 Q 65 55 75 75' stroke='%23A8C5A0' stroke-width='1' fill='none' opacity='0.3'/%3E%3Cpath d='M 320 340 Q 330 320 340 340' stroke='%23D4869A' stroke-width='1.2' fill='none' opacity='0.35'/%3E%3Cpath d='M 315 335 Q 325 315 335 335' stroke='%23D4869A' stroke-width='1' fill='none' opacity='0.25'/%3E%3Cpath d='M 160 200 Q 170 185 180 200' stroke='%23C3D9B8' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+  background-size: 400px 400px;
+}
+
+.app { min-height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 1; }
 
 /* NAV */
 .nav {
@@ -50,20 +75,22 @@ input, textarea, select { font-family: var(--font-body); }
 }
 .nav-title {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 22px;
   color: var(--blush);
   letter-spacing: 0.5px;
 }
-.nav-tabs { display: flex; gap: 4px; }
+.nav-tabs { display: flex; gap: 2px; }
 .nav-tab {
-  padding: 8px 14px;
+  padding: 7px 13px;
   border-radius: 40px;
   border: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
+  font-family: var(--font-body);
   background: transparent;
   color: rgba(255,255,255,0.5);
   transition: all 0.2s;
+  letter-spacing: 0.3px;
 }
 .nav-tab.active { background: var(--dusty-rose); color: #fff; }
 .nav-tab:hover:not(.active) { color: rgba(255,255,255,0.8); }
@@ -77,38 +104,43 @@ input, textarea, select { font-family: var(--font-body); }
   padding: 32px 0 24px;
 }
 .hero-eyebrow {
-  font-size: 12px;
-  letter-spacing: 2px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--dusty-rose);
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: 500;
+  margin-bottom: 10px;
 }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(28px, 6vw, 42px);
+  font-size: clamp(36px, 8vw, 54px);
   color: var(--deep);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: 8px;
+  font-weight: 700;
 }
 .hero h1 em { font-style: italic; color: var(--dusty-rose); }
-.hero-sub { font-size: 15px; color: var(--muted); }
+.hero-sub { font-size: 15px; color: var(--muted); font-family: var(--font-body); font-weight: 300; }
 
 /* CARDS */
 .card {
-  background: var(--surface);
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(212,134,154,0.15);
   padding: 24px 20px;
   margin-bottom: 16px;
+  box-shadow: 0 2px 16px rgba(156, 77, 98, 0.06);
 }
 .card-title {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   color: var(--deep);
   margin-bottom: 4px;
 }
-.card-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.card-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-weight: 300; }
 
 /* GAME SELECTOR */
 .game-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }

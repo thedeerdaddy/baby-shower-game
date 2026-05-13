@@ -465,14 +465,14 @@ export default function App() {
   return (
     <div className="app">
       <nav className="nav no-print">
-        <div className="nav-title">Lainey's Baby Shower 🍼</div>
+        <div className="nav-title">Lainey's Baby Shower</div>
         <div className="nav-tabs">
-          <button className={`nav-tab ${view === 'join' ? 'active' : ''}`} onClick={() => setView('join')}>{joined ? '📱 Play' : '🎉 Join'}</button>
-          <button className={`nav-tab ${view === 'qa' ? 'active' : ''}`} onClick={() => setView('qa')}>💌 Ask</button>
-          <button className={`nav-tab ${view === 'scores' ? 'active' : ''}`} onClick={() => setView('scores')}>🏆 Scores</button>
-          <button className={`nav-tab ${view === 'host' || view === 'pin' ? 'active' : ''}`} onClick={() => { setPinMode('host'); isHost ? setView('host') : setView('pin') }}>📺 Host</button>
-          <button className={`nav-tab ${view === 'judge' ? 'active' : ''}`} onClick={() => { setPinMode('judge'); isJudge ? setView('judge') : setView('pin') }}>⭐ Judge</button>
-          <button className={`nav-tab ${view === 'photos' ? 'active' : ''}`} onClick={() => setView('photos')}>📸 Photos</button>
+          <button className={`nav-tab ${view === 'join' ? 'active' : ''}`} onClick={() => setView('join')}>{joined ? 'Play' : 'Join'}</button>
+          <button className={`nav-tab ${view === 'qa' ? 'active' : ''}`} onClick={() => setView('qa')}>Ask</button>
+          <button className={`nav-tab ${view === 'scores' ? 'active' : ''}`} onClick={() => setView('scores')}>Scores</button>
+          <button className={`nav-tab ${view === 'host' || view === 'pin' ? 'active' : ''}`} onClick={() => { setPinMode('host'); isHost ? setView('host') : setView('pin') }}>Host</button>
+          <button className={`nav-tab ${view === 'judge' ? 'active' : ''}`} onClick={() => { setPinMode('judge'); isJudge ? setView('judge') : setView('pin') }}>Judge</button>
+          <button className={`nav-tab ${view === 'photos' ? 'active' : ''}`} onClick={() => setView('photos')}>Photos</button>
           <button className={`nav-tab ${view === 'qr' ? 'active' : ''}`} onClick={() => setView('qr')}>QR</button>
         </div>
       </nav>
@@ -716,17 +716,10 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
         </div>
         <div className="card">
           <div className="card-title">Test Their Knowledge 🧠</div>
-          <p className="card-sub">Questions for Cooper and Michelle to answer about each other</p>          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--sage-dark)', marginBottom: 8 }}>🔵 Question for Cooper (about Michelle)</div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>e.g. "What is Michelle's favorite animal?"</p>
+          <p className="card-sub">Submit a question for Cooper and Michelle to both answer</p>
+          <div style={{ marginBottom: 8 }}>
             {cooperQDone ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--sage-dark)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setCooperQ(''); setCooperQDone(false) }}>Add another</button></div>
-              : <div style={{ display: 'flex', gap: 8 }}><input className="input" style={{ flex: 1 }} placeholder="Question for Cooper..." value={cooperQ} onChange={e => setCooperQ(e.target.value)} /><button className="btn btn-sage btn-sm" disabled={!cooperQ.trim()} onClick={() => { onSubmitCooperQuestion(cooperQ.trim()); setCooperQDone(true) }}>Add</button></div>}
-          </div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--dusty-rose)', marginBottom: 8 }}>🌸 Question for Michelle (about Cooper)</div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>e.g. "What is Cooper's favorite sports team?"</p>
-            {michelleQDone ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--dusty-rose)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setMichelleQ(''); setMichelleQDone(false) }}>Add another</button></div>
-              : <div style={{ display: 'flex', gap: 8 }}><input className="input" style={{ flex: 1 }} placeholder="Question for Michelle..." value={michelleQ} onChange={e => setMichelleQ(e.target.value)} /><button className="btn btn-primary btn-sm" disabled={!michelleQ.trim()} onClick={() => { onSubmitMichelleQuestion(michelleQ.trim()); setMichelleQDone(true) }}>Add</button></div>}
+              : <div style={{ display: 'flex', gap: 8 }}><input className="input" style={{ flex: 1 }} placeholder="e.g. What is your biggest fear as a parent?" value={cooperQ} onChange={e => setCooperQ(e.target.value)} /><button className="btn btn-sage btn-sm" disabled={!cooperQ.trim()} onClick={() => { onSubmitCooperQuestion(cooperQ.trim()); setCooperQDone(true) }}>Add</button></div>}
           </div>
         </div>
         <div className="card">
@@ -938,17 +931,22 @@ function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetSc
       {tab === 'tyk' && (
         <div className="card">
           <div className="card-title">Test Their Knowledge</div>
-          <p className="card-sub">Guest-submitted questions for Cooper and Michelle</p>
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--sage-dark)', marginBottom: 8 }}>🔵 For Cooper (about Michelle) — {cooperQs.length}</div>
-            {cooperQs.length === 0 ? <p style={{ fontSize: 13, color: 'var(--muted)' }}>None yet.</p> : cooperQs.map(q => <div key={q.id} className="list-item"><span className="li-text">{q.text} <span style={{ fontSize: 11, color: 'var(--muted)' }}>by {q.submittedBy}</span></span><button className="li-del" onClick={() => onRemoveCooperQuestion(q.id)}>✕</button></div>)}
-          </div>
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--dusty-rose)', marginBottom: 8 }}>🌸 For Michelle (about Cooper) — {michelleQs.length}</div>
-            {michelleQs.length === 0 ? <p style={{ fontSize: 13, color: 'var(--muted)' }}>None yet.</p> : michelleQs.map(q => <div key={q.id} className="list-item"><span className="li-text">{q.text} <span style={{ fontSize: 11, color: 'var(--muted)' }}>by {q.submittedBy}</span></span><button className="li-del" onClick={() => onRemoveMichelleQuestion(q.id)}>✕</button></div>)}
+          <p className="card-sub">Questions Cooper and Michelle will both answer live</p>
+          <div style={{ marginBottom: 16 }}>
+            {[...(state.tyk?.cooperQuestions || []), ...(state.tyk?.michelleQuestions || [])].length === 0
+              ? <p style={{ fontSize: 13, color: 'var(--muted)' }}>No questions yet. Guests add them from the Play tab.</p>
+              : [...(state.tyk?.cooperQuestions || []), ...(state.tyk?.michelleQuestions || [])].map(q => (
+                <div key={q.id} className="list-item">
+                  <span className="li-text">{q.text} <span style={{ fontSize: 11, color: 'var(--muted)' }}>by {q.submittedBy}</span></span>
+                  <button className="li-del" onClick={() => onRemoveCooperQuestion(q.id)}>✕</button>
+                </div>
+              ))
+            }
           </div>
           <div className="divider" />
-          <button className="btn btn-primary btn-block" onClick={() => onSelectGame('tyk')} disabled={(cooperQs.length + michelleQs.length) === 0 || playerCount === 0}>Launch Test Their Knowledge 🧠</button>
+          <button className="btn btn-primary btn-block" onClick={() => onSelectGame('tyk')} disabled={(state.tyk?.cooperQuestions?.length + state.tyk?.michelleQuestions?.length || 0) === 0 || playerCount === 0}>
+            Launch Test Their Knowledge 🧠
+          </button>
         </div>
       )}
 
@@ -1079,19 +1077,14 @@ function QuiplashRevealView({ state, onNext, onDone }) {
 // ── TYK HOST VIEWS ─────────────────────────────────────────────────────────
 function TykHostView({ state, playerCount, onStart, onBack }) {
   const tyk = state.tyk || {}
-  const cooperRemaining = (tyk.cooperQuestions || []).filter(q => !tyk.revealedIds?.includes(q.id)).length
-  const michelleRemaining = (tyk.michelleQuestions || []).filter(q => !tyk.revealedIds?.includes(q.id)).length
+  const remaining = [...(tyk.cooperQuestions || []), ...(tyk.michelleQuestions || [])].filter(q => !tyk.revealedIds?.includes(q.id)).length
   return (
     <>
-      <TVScreen><div className="tv-idle-icon">🧠</div><div className="tv-idle-title">Test Their Knowledge</div><div className="tv-idle-sub">🔵 {cooperRemaining} for Cooper · 🌸 {michelleRemaining} for Michelle</div></TVScreen>
-      <div className="card">
-        <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 14 }}>Pick who answers next</p>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-sage" style={{ flex: 1 }} onClick={() => onStart('cooper')} disabled={cooperRemaining === 0 || playerCount === 0}>🔵 Cooper answers</button>
-          <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => onStart('michelle')} disabled={michelleRemaining === 0 || playerCount === 0}>🌸 Michelle answers</button>
-        </div>
+      <TVScreen><div className="tv-idle-icon">🧠</div><div className="tv-idle-title">Test Their Knowledge</div><div className="tv-idle-sub">{remaining} questions remaining</div></TVScreen>
+      <div className="btn-row">
+        <button className="btn btn-primary" onClick={() => onStart('cooper')} disabled={remaining === 0 || playerCount === 0}>Start Round</button>
+        <button className="btn btn-ghost" onClick={onBack}>← Menu</button>
       </div>
-      <button className="btn btn-ghost btn-sm" onClick={onBack}>← Menu</button>
     </>
   )
 }
@@ -1108,50 +1101,60 @@ function TykRoundView({ state, timerPct, playerCount, onOpenVoting }) {
 function TykVoteView({ state, playerCount, onSetRealAnswer, onScore }) {
   const q = state.tyk?.currentQuestion
   const guesses = state.tyk?.guesses || {}
-  const voteCount = Object.keys(state.tyk?.votes || {}).length
-  const judgeCount = Object.keys(state.tyk?.judgeVotes || {}).length
   const realAnswer = state.tyk?.realAnswer
-  const [inputAnswer, setInputAnswer] = useState('')
+  const [cooperInput, setCooperInput] = useState('')
+  const [michelleInput, setMichelleInput] = useState('')
+  const [cooperLocked, setCooperLocked] = useState(false)
+  const [michelleLocked, setMichelleLocked] = useState(false)
 
   return (
     <>
       <TVScreen>
-        <div className="tv-label">{q?.target === 'cooper' ? '🔵 Cooper' : '🌸 Michelle'} — voting open</div>
-        <div className="tv-prompt" style={{ fontSize: 18, marginBottom: 12 }}>{q?.text}</div>
-        <div className="tv-answers">
-          {Object.entries(guesses).map(([name, g]) => <div key={name} className="answer-chip"><div className="chip-name">{name}</div><div className="chip-text">{g}</div></div>)}
-        </div>
-        {realAnswer && <div style={{ marginTop: 12, position: 'relative', zIndex: 1, background: 'rgba(168,197,160,0.2)', borderRadius: 10, padding: '8px 16px' }}><div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', letterSpacing: 1, textTransform: 'uppercase' }}>Real answer</div><div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: '#fff' }}>{realAnswer}</div></div>}
-        <div className="tv-sub" style={{ marginTop: 12 }}>{voteCount} / {playerCount} voted · {judgeCount} judge{judgeCount !== 1 ? 's' : ''} picked</div>
+        <div className="tv-label">🧠 Test Their Knowledge</div>
+        <div className="tv-prompt" style={{ fontSize: 20, marginBottom: 12 }}>{q?.text}</div>
+        {realAnswer
+          ? <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff' }}>{realAnswer}</div>
+            </div>
+          : <div className="tv-sub">{Object.keys(guesses).length} / {playerCount} guessed</div>
+        }
       </TVScreen>
       {!realAnswer && (
         <div className="card">
-          <div className="card-title">Type {q?.target === 'cooper' ? "Cooper's" : "Michelle's"} real answer</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input className="input" style={{ flex: 1 }} placeholder="Their real answer..." value={inputAnswer} onChange={e => setInputAnswer(e.target.value)} autoFocus onKeyDown={e => e.key === 'Enter' && inputAnswer.trim() && onSetRealAnswer(inputAnswer.trim())} />
-            <button className="btn btn-primary" disabled={!inputAnswer.trim()} onClick={() => onSetRealAnswer(inputAnswer.trim())}>Reveal</button>
+          <div className="card-title">Record their answers</div>
+          <div className="field">
+            <label>🔵 Cooper's answer</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input className="input" style={{ flex: 1 }} placeholder="What Cooper says..." value={cooperInput} onChange={e => setCooperInput(e.target.value)} disabled={cooperLocked} />
+              <button className="btn btn-sage btn-sm" disabled={!cooperInput.trim() || cooperLocked} onClick={() => setCooperLocked(true)}>{cooperLocked ? '✓' : 'Lock'}</button>
+            </div>
           </div>
+          <div className="field">
+            <label>🌸 Michelle's answer</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input className="input" style={{ flex: 1 }} placeholder="What Michelle says..." value={michelleInput} onChange={e => setMichelleInput(e.target.value)} disabled={michelleLocked} />
+              <button className="btn btn-primary btn-sm" disabled={!michelleInput.trim() || michelleLocked} onClick={() => setMichelleLocked(true)}>{michelleLocked ? '✓' : 'Lock'}</button>
+            </div>
+          </div>
+          <button className="btn btn-gold btn-block" disabled={!cooperLocked || !michelleLocked} onClick={() => onSetRealAnswer(`🔵 Cooper: ${cooperInput}  |  🌸 Michelle: ${michelleInput}`)}>
+            Reveal Answers 🎉
+          </button>
         </div>
       )}
-      {realAnswer && <div className="btn-row"><button className="btn btn-gold" onClick={onScore}>Score Round 🪙</button></div>}
-      <div className="card"><p style={{ fontSize: 13, color: 'var(--muted)' }}>Guests vote on phones. Cooper or Michelle judges from ⭐ Judge tab. Enter real answer, then score.</p></div>
+      {realAnswer && <div className="btn-row"><button className="btn btn-primary" onClick={onScore}>Next Round</button></div>}
     </>
   )
 }
 function TykRevealView({ state, onNext, onDone }) {
   const q = state.tyk?.currentQuestion
   const guesses = Object.entries(state.tyk?.guesses || {})
-  const earned = computeTykTokens(state.tyk?.guesses || {}, state.tyk?.votes || {}, state.tyk?.judgeVotes || {})
   return (
     <>
       <TVScreen>
-        <div className="tv-label" style={{ marginBottom: 8 }}>{q?.target === 'cooper' ? '🔵 Cooper' : '🌸 Michelle'} — {q?.text}</div>
-        {state.tyk?.realAnswer && <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--mint)', marginBottom: 12, position: 'relative', zIndex: 1 }}>"{state.tyk.realAnswer}"</div>}
+        <div className="tv-label" style={{ marginBottom: 8 }}>🧠 {q?.text}</div>
+        {state.tyk?.realAnswer && <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--mint)', marginBottom: 12, position: 'relative', zIndex: 1 }}>{state.tyk.realAnswer}</div>}
         <div className="tv-answers">
-          {guesses.map(([name, g]) => {
-            const t = earned[name] || 0
-            return <div key={name} className="answer-chip" style={t > 0 ? { borderColor: 'var(--warm-gold)', background: 'rgba(232,197,71,0.15)' } : {}}><div className="chip-name">{name}</div><div className="chip-text">{g}</div>{t > 0 && <div style={{ fontSize: 12, color: 'var(--warm-gold)', marginTop: 4, fontWeight: 700 }}>+{t} 🪙</div>}</div>
-          })}
+          {guesses.map(([name, g]) => <div key={name} className="answer-chip"><div className="chip-name">{name}</div><div className="chip-text">{g}</div></div>)}
         </div>
       </TVScreen>
       <div className="btn-row"><button className="btn btn-primary" onClick={onNext}>Next Round</button><button className="btn btn-ghost" onClick={onDone}>End Game</button></div>
