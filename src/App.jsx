@@ -1274,7 +1274,7 @@ function PhotosView({ isHost, isJudge }) {
           .filter(f => f.name && !f.name.endsWith('/'))
           .map(f => ({
             name: f.name,
-            url: `${supabaseUrl}/storage/v1/object/public/${encodeURIComponent(PHOTO_BUCKET)}/${f.name}`
+            url: `${supabaseUrl}/storage/v1/object/public/baby%20shower%20photos/${f.name}`
           }))
         setPhotos(urls)
       }
