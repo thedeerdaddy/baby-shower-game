@@ -1266,7 +1266,7 @@ function PhotosView({ isHost, isJudge }) {
       const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${PHOTO_BUCKET_ID}`, {
         method: 'POST',
         headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ limit: 200, offset: 0, sortBy: { column: 'created_at', order: 'asc' } })
+        body: JSON.stringify({ prefix: '', limit: 200, offset: 0, sortBy: { column: 'created_at', order: 'asc' } })
       })
       const data = await r.json()
       console.log('fetchPhotos response:', data)
