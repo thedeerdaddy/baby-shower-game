@@ -135,10 +135,11 @@ async function loadState() {
     const r = await fetch(`${url}/rest/v1/game_state?key=eq.main&select=value`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` }
     })
+    if (!r.ok) return undefined // network/auth error — don't overwrite
     const data = await r.json()
     if (data && data[0]) return JSON.parse(data[0].value)
-    return null
-  } catch { return null }
+    return null // table empty — safe to initialize
+  } catch { return undefined } // error — don't overwrite
 }
 
 async function saveState(s) {
@@ -246,8 +247,15 @@ export default function App() {
 
   const refresh = useCallback(async () => {
     const raw = await loadState()
-    const s = raw ? migrateState(raw) : null
-    if (!s) { setState(INITIAL_STATE); saveState(INITIAL_STATE); return }
+    if (raw === undefined) return // network/auth error — don't touch state
+    if (raw === null) {
+      // No row in Supabase — initialize fresh
+      setState(INITIAL_STATE)
+      saveState(INITIAL_STATE)
+      return
+    }
+    const s = migrateState(raw)
+    if (!s) return // migration failed — don't touch state
     setState(prev => {
       if (JSON.stringify(prev) === JSON.stringify(s)) return prev
       return s
