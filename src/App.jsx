@@ -1269,16 +1269,16 @@ function PhotosView({ isHost, isJudge }) {
         body: JSON.stringify({ limit: 200, offset: 0, sortBy: { column: 'created_at', order: 'asc' } })
       })
       const data = await r.json()
-      if (Array.isArray(data)) {
-        const urls = data
-          .filter(f => f.name && !f.name.endsWith('/'))
-          .map(f => ({
-            name: f.name,
-            url: `${supabaseUrl}/storage/v1/object/public/baby%20shower%20photos/${f.name}`
-          }))
-        setPhotos(urls)
-      }
-    } catch {}
+      console.log('fetchPhotos response:', data)
+      const list = Array.isArray(data) ? data : (data?.data || [])
+      const urls = list
+        .filter(f => f.name && !f.name.endsWith('/'))
+        .map(f => ({
+          name: f.name,
+          url: `${supabaseUrl}/storage/v1/object/public/baby%20shower%20photos/${encodeURIComponent(f.name)}`
+        }))
+      setPhotos(urls)
+    } catch(e) { console.error('fetchPhotos error:', e) }
     setLoading(false)
   }, [supabaseUrl, supabaseKey])
 
