@@ -7,7 +7,7 @@ const ROUND_SECS = 75
 const HOST_PIN = import.meta.env.VITE_HOST_PIN || '1234'
 const JUDGE_PIN = 'baby' // Cooper and Michelle's judge PIN
 const PHOTO_BUCKET = 'baby shower photos'
-const PHOTO_BUCKET_ID = 'baby_shower_photos'
+const PHOTO_BUCKET_ID = 'baby%20shower%20photos'
 
 const DEFAULT_QUIPLASH = [
   "Lainey's first words will definitely be...",
@@ -1307,7 +1307,7 @@ function PhotosView({ isHost, isJudge }) {
     const files = Array.from(e.target.files)
     if (!files.length) return
     setUploading(true)
-    const bucket = encodeURIComponent(PHOTO_BUCKET_ID)
+    const bucket = PHOTO_BUCKET_ID
     for (const file of files) {
       const ext = file.name.split('.').pop()
       const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
