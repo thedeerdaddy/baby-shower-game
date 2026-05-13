@@ -1263,8 +1263,10 @@ function PhotosView({ isHost, isJudge }) {
     if (!supabaseUrl || !supabaseKey) return
     try {
       const bucket = encodeURIComponent(PHOTO_BUCKET)
-      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucket}?sortBy=created_at&order=asc`, {
-        headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
+      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucket}`, {
+        method: 'POST',
+        headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ limit: 200, offset: 0, sortBy: { column: 'created_at', order: 'asc' } })
       })
       const data = await r.json()
       if (Array.isArray(data)) {
