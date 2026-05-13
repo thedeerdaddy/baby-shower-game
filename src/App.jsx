@@ -716,26 +716,15 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
         </div>
         <div className="card">
           <div className="card-title">Test Their Knowledge 🧠</div>
-          <p className="card-sub">Submit a question for Cooper and Michelle to both answer</p>
+          <p className="card-sub">Submit a question for Cooper and Michelle to answer about each other</p>
           <div style={{ marginBottom: 8 }}>
             {cooperQDone ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--sage-dark)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setCooperQ(''); setCooperQDone(false) }}>Add another</button></div>
               : <div style={{ display: 'flex', gap: 8 }}><input className="input" style={{ flex: 1 }} placeholder="e.g. What is your biggest fear as a parent?" value={cooperQ} onChange={e => setCooperQ(e.target.value)} /><button className="btn btn-sage btn-sm" disabled={!cooperQ.trim()} onClick={() => { onSubmitCooperQuestion(cooperQ.trim()); setCooperQDone(true) }}>Add</button></div>}
           </div>
         </div>
         <div className="card">
-          <div className="card-title">Quiplash Prompts 😂</div>
-          <p className="card-sub">Submit a funny prompt for the Quiplash round</p>
-          {quiplashPromptDone
-            ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--sage-dark)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setQuiplashPrompt(''); setQuiplashPromptDone(false) }}>Add another</button></div>
-            : <div style={{ display: 'flex', gap: 8 }}>
-              <input className="input" style={{ flex: 1 }} placeholder="e.g. The baby's first words will be..." value={quiplashPrompt} onChange={e => setQuiplashPrompt(e.target.value)} />
-              <button className="btn btn-sage btn-sm" disabled={!quiplashPrompt.trim()} onClick={() => { onAddQuiplashPrompt(quiplashPrompt.trim(), playerName); setQuiplashPromptDone(true) }}>Add</button>
-            </div>
-          }
-        </div>
-        <div className="card">
           <div className="card-title">Ask Anything 💌</div>
-          <p className="card-sub">Ask Cooper and Michelle anything — the host will read it out live</p>
+          <p className="card-sub">Ask Cooper and Michelle anything!</p>
           {qaQuestionDone
             ? <div style={{ textAlign: 'center', padding: '8px 0' }}><span style={{ color: 'var(--sage-dark)', fontWeight: 600 }}>✅ Submitted!</span> <button className="btn btn-ghost btn-sm" style={{ marginLeft: 8 }} onClick={() => { setQaQuestion(''); setQaQuestionDone(false) }}>Ask another</button></div>
             : <div style={{ display: 'flex', gap: 8 }}>
