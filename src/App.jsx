@@ -7,6 +7,7 @@ const ROUND_SECS = 75
 const HOST_PIN = import.meta.env.VITE_HOST_PIN || '1234'
 const JUDGE_PIN = 'baby' // Cooper and Michelle's judge PIN
 const PHOTO_BUCKET = 'baby shower photos'
+const PHOTO_BUCKET_ID = 'baby_shower_photos'
 
 const DEFAULT_QUIPLASH = [
   "Lainey's first words will definitely be...",
@@ -1262,8 +1263,7 @@ function PhotosView({ isHost, isJudge }) {
   const fetchPhotos = useCallback(async () => {
     if (!supabaseUrl || !supabaseKey) return
     try {
-      const bucket = encodeURIComponent(PHOTO_BUCKET)
-      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucket}`, {
+      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${PHOTO_BUCKET_ID}`, {
         method: 'POST',
         headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ limit: 200, offset: 0, sortBy: { column: 'created_at', order: 'asc' } })
@@ -1275,7 +1275,7 @@ function PhotosView({ isHost, isJudge }) {
         .filter(f => f.name && !f.name.endsWith('/'))
         .map(f => ({
           name: f.name,
-          url: `${supabaseUrl}/storage/v1/object/public/baby%20shower%20photos/${encodeURIComponent(f.name)}`
+          url: `${supabaseUrl}/storage/v1/object/public/${PHOTO_BUCKET_ID}/${encodeURIComponent(f.name)}`
         }))
       setPhotos(urls)
     } catch(e) { console.error('fetchPhotos error:', e) }
@@ -1307,7 +1307,7 @@ function PhotosView({ isHost, isJudge }) {
     const files = Array.from(e.target.files)
     if (!files.length) return
     setUploading(true)
-    const bucket = encodeURIComponent(PHOTO_BUCKET)
+    const bucket = encodeURIComponent(PHOTO_BUCKET_ID)
     for (const file of files) {
       const ext = file.name.split('.').pop()
       const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
@@ -1328,7 +1328,7 @@ function PhotosView({ isHost, isJudge }) {
 
   const handleDelete = async (name) => {
     try {
-      await fetch(`${supabaseUrl}/storage/v1/object/${encodeURIComponent(PHOTO_BUCKET)}/${name}`, {
+      await fetch(`${supabaseUrl}/storage/v1/object/${PHOTO_BUCKET_ID}/${name}`, {
         method: 'DELETE',
         headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
       })
