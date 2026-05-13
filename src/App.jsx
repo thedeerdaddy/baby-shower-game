@@ -6,7 +6,7 @@ const POLL_MS = 2500
 const ROUND_SECS = 75
 const HOST_PIN = import.meta.env.VITE_HOST_PIN || '1234'
 const JUDGE_PIN = 'baby' // Cooper and Michelle's judge PIN
-const PHOTO_BUCKET = 'baby-shower-photos'
+const PHOTO_BUCKET = 'baby shower photos'
 
 const DEFAULT_QUIPLASH = [
   "Lainey's first words will definitely be...",
