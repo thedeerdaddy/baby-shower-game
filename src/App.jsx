@@ -1262,7 +1262,8 @@ function PhotosView({ isHost, isJudge }) {
   const fetchPhotos = useCallback(async () => {
     if (!supabaseUrl || !supabaseKey) return
     try {
-      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${PHOTO_BUCKET}?sortBy=created_at&order=asc`, {
+      const bucket = encodeURIComponent(PHOTO_BUCKET)
+      const r = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucket}?sortBy=created_at&order=asc`, {
         headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
       })
       const data = await r.json()
@@ -1271,7 +1272,7 @@ function PhotosView({ isHost, isJudge }) {
           .filter(f => f.name && !f.name.endsWith('/'))
           .map(f => ({
             name: f.name,
-            url: `${supabaseUrl}/storage/v1/object/public/${PHOTO_BUCKET}/${f.name}`
+            url: `${supabaseUrl}/storage/v1/object/public/${encodeURIComponent(PHOTO_BUCKET)}/${f.name}`
           }))
         setPhotos(urls)
       }
@@ -1304,26 +1305,28 @@ function PhotosView({ isHost, isJudge }) {
     const files = Array.from(e.target.files)
     if (!files.length) return
     setUploading(true)
+    const bucket = encodeURIComponent(PHOTO_BUCKET)
     for (const file of files) {
       const ext = file.name.split('.').pop()
       const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
       try {
-        await fetch(`${supabaseUrl}/storage/v1/object/${PHOTO_BUCKET}/${name}`, {
+        const res = await fetch(`${supabaseUrl}/storage/v1/object/${bucket}/${name}`, {
           method: 'POST',
           headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}`, 'Content-Type': file.type },
           body: file
         })
-      } catch {}
+        if (!res.ok) console.error('Upload failed', await res.text())
+      } catch(e) { console.error('Upload error', e) }
     }
     await fetchPhotos()
-    setCurrentIdx(photos.length) // jump to newly uploaded
+    setCurrentIdx(Math.max(0, photos.length))
     setUploading(false)
     e.target.value = ''
   }
 
   const handleDelete = async (name) => {
     try {
-      await fetch(`${supabaseUrl}/storage/v1/object/${PHOTO_BUCKET}/${name}`, {
+      await fetch(`${supabaseUrl}/storage/v1/object/${encodeURIComponent(PHOTO_BUCKET)}/${name}`, {
         method: 'DELETE',
         headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
       })
