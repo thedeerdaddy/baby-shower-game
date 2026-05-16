@@ -329,6 +329,7 @@ export default function App() {
     return fresh
   })
 
+  const resetScores = () => update(s => { s.scores = {}; s.lastRoundTokens = {}; return s })
   const clearPlayers = () => update(s => { s.players = []; s.scores = {}; return s })
 
   // QUIPLASH HOST
