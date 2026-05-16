@@ -329,7 +329,7 @@ export default function App() {
     return fresh
   })
 
-  const resetScores = () => update(s => { s.scores = {}; s.lastRoundTokens = {}; return s })
+  const clearPlayers = () => update(s => { s.players = []; s.scores = {}; return s })
 
   // QUIPLASH HOST
   const startQuiplashRound = () => update(s => {
@@ -484,14 +484,16 @@ export default function App() {
       )}
 
       <main className="main">
-        {view === 'join' && <JoinView state={state} joined={joined} playerName={playerName} hasSubmitted={hasSubmitted} hasVoted={hasVoted} timerPct={timerPct} onJoin={joinGame} onSubmitQuiplash={submitQuiplash} onVoteQuiplash={voteQuiplash} onSubmitTykGuess={submitTykGuess} onVoteTyk={voteTyk} onSubmitTrivia={submitTrivia} onSubmitCooperQuestion={submitCooperQuestion} onSubmitMichelleQuestion={submitMichelleQuestion} onAddQuiplashPrompt={addQuiplashPrompt} onSubmitQA={submitQA} />}
-        {view === 'qa' && <QAView state={state} joined={joined} playerName={playerName} onSubmitQA={submitQA} />}
-        {view === 'scores' && <ScoresView state={state} animatingTokens={animatingTokens} />}
-        {view === 'pin' && <PinView pinInput={pinInput} setPinInput={setPinInput} pinError={pinError} pinMode={pinMode} onLogin={hostLogin} />}
-        {view === 'host' && isHost && <HostView state={state} timerPct={timerPct} playerCount={state.players.length} onSelectGame={selectGame} onResetAll={resetAll} onResetScores={resetScores} onStartQuiplash={startQuiplashRound} onOpenQuiplashVoting={openQuiplashVoting} onScoreQuiplash={scoreQuiplash} onNextQuiplash={nextQuiplash} onStartTyk={startTykRound} onOpenTykVoting={openTykVoting} onSetTykRealAnswer={setTykRealAnswer} onScoreTyk={scoreTyk} onNextTyk={nextTyk} onStartTrivia={startTriviaRound} onRevealTrivia={revealTrivia} onNextTrivia={nextTrivia} onAddQuiplashPrompt={addQuiplashPrompt} onRemoveQuiplashPrompt={removeQuiplashPrompt} onAddTriviaQuestion={addTriviaQuestion} onRemoveTriviaQuestion={removeTriviaQuestion} onRemoveCooperQuestion={removeCooperQuestion} onRemoveMichelleQuestion={removeMichelleQuestion} onMarkQAAnswered={markQAAnswered} onRemoveQA={removeQA} onGenerateAI={generateAIPrompts} />}
-        {view === 'judge' && isJudge && <JudgeView state={state} judgeName={judgeName} setJudgeName={setJudgeName} onJudgeVoteQuiplash={judgeVoteQuiplash} onJudgeVoteTyk={judgeVoteTyk} />}
-        {view === 'photos' && <PhotosView isHost={isHost} isJudge={isJudge} />}
-        {view === 'qr' && <QRView appUrl={appUrl} />}
+        <div key={view} className="page-enter">
+          {view === 'join' && <JoinView state={state} joined={joined} playerName={playerName} hasSubmitted={hasSubmitted} hasVoted={hasVoted} timerPct={timerPct} onJoin={joinGame} onSubmitQuiplash={submitQuiplash} onVoteQuiplash={voteQuiplash} onSubmitTykGuess={submitTykGuess} onVoteTyk={voteTyk} onSubmitTrivia={submitTrivia} onSubmitCooperQuestion={submitCooperQuestion} onSubmitMichelleQuestion={submitMichelleQuestion} onAddQuiplashPrompt={addQuiplashPrompt} onSubmitQA={submitQA} />}
+          {view === 'qa' && <QAView state={state} joined={joined} playerName={playerName} onSubmitQA={submitQA} />}
+          {view === 'scores' && <ScoresView state={state} animatingTokens={animatingTokens} />}
+          {view === 'pin' && <PinView pinInput={pinInput} setPinInput={setPinInput} pinError={pinError} pinMode={pinMode} onLogin={hostLogin} />}
+          {view === 'host' && isHost && <HostView state={state} timerPct={timerPct} playerCount={state.players.length} onSelectGame={selectGame} onResetAll={resetAll} onResetScores={resetScores} onClearPlayers={clearPlayers} onStartQuiplash={startQuiplashRound} onOpenQuiplashVoting={openQuiplashVoting} onScoreQuiplash={scoreQuiplash} onNextQuiplash={nextQuiplash} onStartTyk={startTykRound} onOpenTykVoting={openTykVoting} onSetTykRealAnswer={setTykRealAnswer} onScoreTyk={scoreTyk} onNextTyk={nextTyk} onStartTrivia={startTriviaRound} onRevealTrivia={revealTrivia} onNextTrivia={nextTrivia} onAddQuiplashPrompt={addQuiplashPrompt} onRemoveQuiplashPrompt={removeQuiplashPrompt} onAddTriviaQuestion={addTriviaQuestion} onRemoveTriviaQuestion={removeTriviaQuestion} onRemoveCooperQuestion={removeCooperQuestion} onRemoveMichelleQuestion={removeMichelleQuestion} onMarkQAAnswered={markQAAnswered} onRemoveQA={removeQA} onGenerateAI={generateAIPrompts} />}
+          {view === 'judge' && isJudge && <JudgeView state={state} judgeName={judgeName} setJudgeName={setJudgeName} onJudgeVoteQuiplash={judgeVoteQuiplash} onJudgeVoteTyk={judgeVoteTyk} />}
+          {view === 'photos' && <PhotosView isHost={isHost} isJudge={isJudge} />}
+          {view === 'qr' && <QRView appUrl={appUrl} />}
+        </div>
       </main>
     </div>
   )
@@ -773,7 +775,7 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
           <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 14 }}>Pick your favorites. Each vote gives that player 100 🪙</p>
           {myAnswers.map(([player, ans]) => (
             <div key={player} onClick={() => toggle(player)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, border: `2px solid ${selectedVotes.includes(player) ? 'var(--dusty-rose)' : 'var(--border)'}`, marginBottom: 10, cursor: 'pointer', background: selectedVotes.includes(player) ? '#FEF5F7' : 'var(--cream)', transition: 'all 0.15s' }}>
-              <div style={{ flex: 1 }}><div style={{ fontSize: 16, fontWeight: 600 }}>{ans}</div><div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{player}</div></div>
+              <div style={{ flex: 1 }}><div style={{ fontSize: 16, fontWeight: 600 }}>{ans}</div></div>
               {selectedVotes.includes(player) && <div style={{ fontSize: 18 }}>❤️</div>}
             </div>
           ))}
@@ -849,9 +851,9 @@ function JoinView({ state, joined, playerName, hasSubmitted, hasVoted, timerPct,
 }
 
 // ── HOST VIEW ──────────────────────────────────────────────────────────────
-function HostView({ state, timerPct, playerCount, onSelectGame, onResetAll, onResetScores, onStartQuiplash, onOpenQuiplashVoting, onScoreQuiplash, onNextQuiplash, onStartTyk, onOpenTykVoting, onSetTykRealAnswer, onScoreTyk, onNextTyk, onStartTrivia, onRevealTrivia, onNextTrivia, onAddQuiplashPrompt, onRemoveQuiplashPrompt, onAddTriviaQuestion, onRemoveTriviaQuestion, onRemoveCooperQuestion, onRemoveMichelleQuestion, onMarkQAAnswered, onRemoveQA, onGenerateAI }) {
+function HostView({ state, timerPct, playerCount, onSelectGame, onResetAll, onResetScores, onClearPlayers, onStartQuiplash, onOpenQuiplashVoting, onScoreQuiplash, onNextQuiplash, onStartTyk, onOpenTykVoting, onSetTykRealAnswer, onScoreTyk, onNextTyk, onStartTrivia, onRevealTrivia, onNextTrivia, onAddQuiplashPrompt, onRemoveQuiplashPrompt, onAddTriviaQuestion, onRemoveTriviaQuestion, onRemoveCooperQuestion, onRemoveMichelleQuestion, onMarkQAAnswered, onRemoveQA, onGenerateAI }) {
   const phase = state.phase
-  if (phase === 'lobby' || phase === 'game-select') return <LobbyHostView state={state} playerCount={playerCount} onSelectGame={onSelectGame} onResetAll={onResetAll} onResetScores={onResetScores} onAddQuiplashPrompt={onAddQuiplashPrompt} onRemoveQuiplashPrompt={onRemoveQuiplashPrompt} onAddTriviaQuestion={onAddTriviaQuestion} onRemoveTriviaQuestion={onRemoveTriviaQuestion} onRemoveCooperQuestion={onRemoveCooperQuestion} onRemoveMichelleQuestion={onRemoveMichelleQuestion} onMarkQAAnswered={onMarkQAAnswered} onRemoveQA={onRemoveQA} onGenerateAI={onGenerateAI} />
+  if (phase === 'lobby' || phase === 'game-select') return <LobbyHostView state={state} playerCount={playerCount} onSelectGame={onSelectGame} onResetAll={onResetAll} onResetScores={onResetScores} onClearPlayers={onClearPlayers} onAddQuiplashPrompt={onAddQuiplashPrompt} onRemoveQuiplashPrompt={onRemoveQuiplashPrompt} onAddTriviaQuestion={onAddTriviaQuestion} onRemoveTriviaQuestion={onRemoveTriviaQuestion} onRemoveCooperQuestion={onRemoveCooperQuestion} onRemoveMichelleQuestion={onRemoveMichelleQuestion} onMarkQAAnswered={onMarkQAAnswered} onRemoveQA={onRemoveQA} onGenerateAI={onGenerateAI} />
   if (phase === 'quiplash-host') return <QuiplashHostView state={state} playerCount={playerCount} onStart={onStartQuiplash} onBack={onResetAll} />
   if (phase === 'quiplash-round') return <QuiplashRoundView state={state} timerPct={timerPct} playerCount={playerCount} onOpenVoting={onOpenQuiplashVoting} />
   if (phase === 'quiplash-vote') return <QuiplashVoteView state={state} playerCount={playerCount} onScore={onScoreQuiplash} />
@@ -867,7 +869,7 @@ function HostView({ state, timerPct, playerCount, onSelectGame, onResetAll, onRe
 }
 
 // ── LOBBY HOST ─────────────────────────────────────────────────────────────
-function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetScores, onAddQuiplashPrompt, onRemoveQuiplashPrompt, onAddTriviaQuestion, onRemoveTriviaQuestion, onRemoveCooperQuestion, onRemoveMichelleQuestion, onMarkQAAnswered, onRemoveQA, onGenerateAI }) {
+function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetScores, onClearPlayers, onAddQuiplashPrompt, onRemoveQuiplashPrompt, onAddTriviaQuestion, onRemoveTriviaQuestion, onRemoveCooperQuestion, onRemoveMichelleQuestion, onMarkQAAnswered, onRemoveQA, onGenerateAI }) {
   const [tab, setTab] = useState('quiplash')
   const [newPrompt, setNewPrompt] = useState('')
   const [triviaQ, setTriviaQ] = useState(''); const [cooperA, setCooperA] = useState(''); const [michelleA, setMichelleA] = useState('')
@@ -898,7 +900,7 @@ function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetSc
       {state.players.length > 0 && <div className="player-list" style={{ marginBottom: 20 }}>{state.players.map(p => <span key={p} className="player-tag">{p} <span style={{ fontSize: 11, color: 'var(--gold-dark)' }}>{state.scores[p] || 0}🪙</span></span>)}</div>}
 
       <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap', borderBottom: '1px solid var(--border)', paddingBottom: 12 }}>
-        {tabs.map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: '8px 14px', borderRadius: 40, border: 'none', fontSize: 13, fontWeight: 600, background: tab === t.id ? 'var(--dusty-rose)' : 'var(--cream)', color: tab === t.id ? '#fff' : 'var(--muted)', cursor: 'pointer' }}>{t.label}</button>)}
+        {tabs.map(t => <button key={t.id} onClick={() => setTab(t.id)} className={`game-tab-btn ${tab === t.id ? 'active' : ''}`}>{t.label}</button>)}
       </div>
 
       {tab === 'quiplash' && (
@@ -993,8 +995,9 @@ function LobbyHostView({ state, playerCount, onSelectGame, onResetAll, onResetSc
       )}
 
       <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-        <button className="btn btn-ghost btn-sm" onClick={onResetAll}>↺ Reset Games</button>
-        <button className="btn btn-ghost btn-sm" onClick={onResetScores}>↺ Reset Scores</button>
+        <button className="btn btn-ghost btn-sm" onClick={onResetAll}>Reset Games</button>
+        <button className="btn btn-ghost btn-sm" onClick={onResetScores}>Reset Scores</button>
+        <button className="btn btn-ghost btn-sm" onClick={onClearPlayers}>Clear Players</button>
       </div>
     </>
   )
@@ -1028,7 +1031,7 @@ function QuiplashVoteView({ state, playerCount, onScore }) {
         <div className="tv-label">Voting Open — Quiplash</div>
         <div className="tv-prompt" style={{ fontSize: 18, marginBottom: 12 }}>{promptText(state.quiplash.currentPrompt)}</div>
         <div className="tv-answers">
-          {answers.map(([name, ans]) => <div key={name} className="answer-chip"><div className="chip-name">{name}</div><div className="chip-text">{ans}</div></div>)}
+          {answers.map(([name, ans]) => <div key={name} className="answer-chip"><div className="chip-text">{ans}</div></div>)}
         </div>
         <div className="tv-sub" style={{ marginTop: 12 }}>{voteCount} / {playerCount} voted · {judgeCount} judge{judgeCount !== 1 ? 's' : ''} picked</div>
       </TVScreen>
